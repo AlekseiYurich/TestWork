@@ -14,53 +14,65 @@ class LineOrder
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\OneToMany(mappedBy: 'lineOrder', targetEntity: Order::class)]
-    private Collection $orders;
-
     #[ORM\Column(length: 255)]
-    private ?string $article = null;
-
+    private ?int $article = null;
     #[ORM\Column]
     private ?int $amountProducts = null;
 
-    public function __construct( ?string $article, ?int $amountProducts,?int $id = null )
+    #[ORM\OneToMany(mappedBy: 'orderLine', targetEntity: Product::class)]
+    private Collection $products;
+
+    #[ORM\ManyToOne(inversedBy: 'lineOrders')]
+    private ?Order $orderby = null;
+
+
+    public function __construct(?int $article, ?int $amountProducts, ?Order $orderby, ?int $id = null)
     {
         $this->id = $id;
         $this->article = $article;
         $this->amountProducts = $amountProducts;
+        $this->products = new ArrayCollection();
+        $this->orderby = $orderby;
     }
 
 
-    public function getId(): ?int
+    public function getProducts(): Collection
     {
-        return $this->id;
+        return $this->products;
     }
 
-    public function getOrders(): Collection
+    public function addProduct(Product $product): static
     {
-        return $this->orders;
-    }
-
-    public function addOrder(Order $order): static
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->setLineOrder($this);
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setOrderLine($this);
         }
 
         return $this;
     }
 
-    public function removeOrder(Order $order): static
+    public function removeProduct(Product $product): static
     {
-        if ($this->orders->removeElement($order)) {
-            if ($order->getLineOrder() === $this) {
-                $order->setLineOrder(null);
+        if ($this->products->removeElement($product)) {
+            if ($product->getOrderLine() === $this) {
+                $product->setOrderLine(null);
             }
         }
 
         return $this;
     }
+
+    public function getOrderby(): ?Order
+    {
+        return $this->orderby;
+    }
+
+    public function setOrderby(?Order $orderby): static
+    {
+        $this->orderby = $orderby;
+
+        return $this;
+    }
+
 
 }

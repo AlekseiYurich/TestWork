@@ -15,26 +15,20 @@ class Order
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\OneToMany(mappedBy: 'orderBy', targetEntity: Product::class)]
-    private Collection $products;
-
     #[ORM\Column(length: 255)]
-    private ?string $customer = null;
-
+    private ?string $customer;
     #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    private ?string $status ;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    private ?LineOrder $lineOrder = null;
+    #[ORM\OneToMany(mappedBy: 'orderby', targetEntity: LineOrder::class)]
+    private Collection $lineOrders;
 
-    public function __construct(?string $customer, ?string $status, ?LineOrder $lineOrder, ?int $id = null)
+    public function __construct( ?string $customer  = null, ?string $status= null,?int $id = null)
     {
         $this->id = $id;
-        $this->products = new ArrayCollection();
         $this->customer = $customer;
         $this->status = $status;
-        $this->lineOrder = $lineOrder;
+        $this->lineOrders = new ArrayCollection();
     }
 
 
@@ -44,26 +38,27 @@ class Order
     }
 
 
-    public function getProducts(): Collection
+
+    public function getLineOrders(): Collection
     {
-        return $this->products;
+        return $this->lineOrders;
     }
 
-    public function addProduct(Product $product): static
+    public function addLineOrder(LineOrder $lineOrder): static
     {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
-            $product->setOrderBy($this);
+        if (!$this->lineOrders->contains($lineOrder)) {
+            $this->lineOrders->add($lineOrder);
+            $lineOrder->setOrderby($this);
         }
 
         return $this;
     }
 
-    public function removeProduct(Product $product): static
+    public function removeLineOrder(LineOrder $lineOrder): static
     {
-        if ($this->products->removeElement($product)) {
-            if ($product->getOrderBy() === $this) {
-                $product->setOrderBy(null);
+        if ($this->lineOrders->removeElement($lineOrder)) {
+            if ($lineOrder->getOrderby() === $this) {
+                $lineOrder->setOrderby(null);
             }
         }
 
@@ -71,15 +66,18 @@ class Order
     }
 
 
-    public function getLineOrder(): ?LineOrder
+    public function setCustomer(?string $customer): Order
     {
-        return $this->lineOrder;
-    }
-
-    public function setLineOrder(?LineOrder $lineOrder): static
-    {
-        $this->lineOrder = $lineOrder;
-
+        $this->customer = $customer;
         return $this;
     }
+
+    public function setStatus(?string $status): Order
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+
+
 }

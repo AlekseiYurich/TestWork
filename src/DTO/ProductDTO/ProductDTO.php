@@ -2,10 +2,11 @@
 
 namespace App\DTO\ProductDTO;
 
+use Prugala\RequestDto\Dto\RequestDtoInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class ProductDTO
+class ProductDTO implements RequestDtoInterface
 {
     #[Length(min: 1)]
     #[NotBlank]
@@ -15,7 +16,7 @@ class ProductDTO
     #[NotBlank]
     public string $handle;
     #[NotBlank]
-    public array $orderId;
+    public array $orderLineId;
 
 
     public function getName(): string
@@ -51,16 +52,18 @@ class ProductDTO
         return $this;
     }
 
-    public function getOrderId(): array
+    public function getOrderLineId(): array
     {
-        return $this->orderId;
+        return $this->orderLineId;
     }
 
-    public function setOrderId(array $orderId): ProductDTO
+    public function setOrderLineId(array $orderLineId): ProductDTO
     {
-        $this->orderId = $orderId;
+        $this->orderLineId = $orderLineId;
         return $this;
     }
+
+
 
 
 }

@@ -2,16 +2,16 @@
 
 namespace App\DTO\OrderDTO;
 
+use Prugala\RequestDto\Dto\RequestDtoInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class OrderDTO
+class OrderDTO implements RequestDtoInterface
 {
     #[NotBlank]
     public string $customer;
     #[NotBlank]
     public string $status;
-    #[NotBlank]
-    public array $lineOrderId;
+
 
 
     public function getCustomer(): string
@@ -37,17 +37,7 @@ class OrderDTO
         return $this;
     }
 
-    public function getLineOrderId(): array
-    {
-        return $this->lineOrderId;
-    }
 
-
-    public function setLineOrderId(array $lineOrderId): OrderDTO
-    {
-        $this->lineOrderId = $lineOrderId;
-        return $this;
-    }
 
 
 }

@@ -1,0 +1,66 @@
+<?php
+
+namespace App\DTO\ProductDTO;
+
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
+class ProductDTO
+{
+    #[Length(min: 1)]
+    #[NotBlank]
+    public string $name;
+    #[NotBlank]
+    public string $description;
+    #[NotBlank]
+    public string $handle;
+    #[NotBlank]
+    public array $orderId;
+
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): ProductDTO
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): ProductDTO
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getHandle(): string
+    {
+        return $this->handle;
+    }
+
+    public function setHandle(string $handle): ProductDTO
+    {
+        $this->handle = $handle;
+        return $this;
+    }
+
+    public function getOrderId(): array
+    {
+        return $this->orderId;
+    }
+
+    public function setOrderId(array $orderId): ProductDTO
+    {
+        $this->orderId = $orderId;
+        return $this;
+    }
+
+
+}

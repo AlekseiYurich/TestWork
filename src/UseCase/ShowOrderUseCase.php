@@ -3,6 +3,7 @@
 namespace App\UseCase;
 
 use App\Entity\Order;
+use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ShowOrderUseCase
@@ -29,5 +30,7 @@ class ShowOrderUseCase
         $this->em->commit();
         return $findDB;
     }
+
+
 
 }

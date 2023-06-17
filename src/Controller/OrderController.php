@@ -8,6 +8,7 @@ use App\Subscriber\ExceptionSubscriber;
 use App\UseCase\CreateOrderUseCase;
 use App\UseCase\DeleteOrderUseCase;
 use App\UseCase\ShowOrderUseCase;
+use App\UseCase\SuccessfulOrderConfirmationUseCase;
 use App\UseCase\UpdateOrderUseCase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -15,7 +16,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use function Symfony\Component\String\u;
+
+
 
 class OrderController extends AbstractController
 {
@@ -84,4 +86,15 @@ class OrderController extends AbstractController
         }
 
     }
+    #[Route('/successful',name: 'successful_order',methods: 'POST')]
+    public function successfulOrderConfirmation(Request $request,SuccessfulOrderConfirmationUseCase $confirmationUseCase) : Response
+    {
+        try {
+            $confirmationUseCase->sucOrder($request['status'],$request->getPathInfo());
+            return new JsonResponse('update successfully', 201);
+        } catch (\Exception $e) {
+            return new JsonResponse($e->getMessage());
+        }
+    }
+
 }
